@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using BepInEx.Unity.Mono;
 using HarmonyLib;
@@ -20,19 +21,20 @@ public class SoundReplacement : BaseUnityPlugin
     internal static new ManualLogSource Logger;
     public static SoundReplacement inst;
 
+    private ConfigEntry<bool> soundReplacement;
+
     private void Awake()
     {
         inst = this;
         // Plugin startup logic
         Logger = base.Logger;
-        soundReplacement = PlayerPrefs.GetInt("PluginRDsoundReplacement", 1) == 1;
-        Logger.LogInfo($"Sound Replacement plugin loaded! Shall {(soundReplacement ? "" : "not ")}replace sounds!");
+        soundReplacement = Config.Bind("General", "ReplaceSounds", true, "Whether to replace sounds or not with user-defined sounds.");
+        Logger.LogInfo($"Sound Replacement plugin loaded! Will {(soundReplacement.Value ? "" : "not ")}replace sounds!");
 
         Harmony instance = new Harmony("patcher");
         instance.PatchAll(typeof(AwakePatch)); 
         instance.PatchAll(typeof(FlushData));
         instance.PatchAll(typeof(FindOrLoadAudioClip));
-        instance.PatchAll(typeof(UpdatePatch));
     }
 
     [HarmonyPatch(typeof(AudioManager), nameof(AudioManager.Awake))]
@@ -68,7 +70,7 @@ public class SoundReplacement : BaseUnityPlugin
                     text = "sndDoctahHehehe";
             }
 
-            if (inst.soundReplacement && inst.replacedSongs.IndexOf(text) >= 0)
+            if (inst.soundReplacement.Value && inst.replacedSongs.IndexOf(text) >= 0)
             {
                 List<string> songs = inst.replacedSongsDir[text];
                 int index = UnityEngine.Random.Range(0, songs.Count);
@@ -79,24 +81,6 @@ public class SoundReplacement : BaseUnityPlugin
                 return false;
             }
             return true;
-        }
-    }
-
-    [HarmonyPatch(typeof(AudioManager), nameof(AudioManager.Update))]
-    private static class UpdatePatch
-    {
-        public static void Postfix()
-        {
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
-                inst.soundReplacement = !inst.soundReplacement;
-                PlayerPrefs.SetInt("PluginRDsoundReplacement", inst.soundReplacement ? 1 : 0);
-                PlayerPrefs.Save();
-                Logger.LogInfo($"Shall now {(inst.soundReplacement ? "" : "not ")}replace sounds!");
-                // can freeze the gmae ?
-                // please someone investigate
-                // inst.ShowDebugMessage($"Sound replacement is now toggled {(inst.soundReplacement ? "on" : "off")}!");
-            }
         }
     }
 
@@ -216,6 +200,4 @@ public class SoundReplacement : BaseUnityPlugin
     public List<string> replacedSongs = [];
 	public Dictionary<string, List<string>> replacedSongsDir;
 	public Dictionary<string, List<string>> dsls;
-
-    public bool soundReplacement = true;
 }
