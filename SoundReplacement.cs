@@ -13,6 +13,7 @@ using UnityEngine;
 namespace SoundReplacement;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInProcess("Rhythm Doctor.exe")]
 // i don't know what
 #pragma warning disable BepInEx002 // Classes with BepInPlugin attribute must inherit from BaseUnityPlugin
 public class SoundReplacement : BaseUnityPlugin
