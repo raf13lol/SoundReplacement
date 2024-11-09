@@ -33,7 +33,7 @@ public class SoundReplacement : BaseUnityPlugin
         Logger.LogInfo($"Sound Replacement plugin loaded! Will {(soundReplacement.Value ? "" : "not ")}replace sounds!");
 
         Harmony instance = new Harmony("patcher");
-        instance.PatchAll(typeof(AwakePatch)); 
+        instance.PatchAll(typeof(AwakePatch));
         instance.PatchAll(typeof(FlushData));
         instance.PatchAll(typeof(FindOrLoadAudioClip));
     }
@@ -46,7 +46,7 @@ public class SoundReplacement : BaseUnityPlugin
             inst.ScanFiles(__instance);
         }
     }
-    
+
     [HarmonyPatch(typeof(AudioManager), nameof(AudioManager.FlushData))]
     private static class FlushData
     {
@@ -105,7 +105,7 @@ public class SoundReplacement : BaseUnityPlugin
                 }
                 if (!text.EndsWith(".ogg") && !text.EndsWith(".wav"))
                     continue;
-                
+
                 string text2 = text.Replace(path, "").Replace(".ogg", "").Replace(".wav", "");
 
                 if (text2.IndexOf(".") >= 0)
@@ -199,6 +199,6 @@ public class SoundReplacement : BaseUnityPlugin
     }
 
     public List<string> replacedSongs = [];
-	public Dictionary<string, List<string>> replacedSongsDir;
-	public Dictionary<string, List<string>> dsls;
+    public Dictionary<string, List<string>> replacedSongsDir;
+    public Dictionary<string, List<string>> dsls;
 }
