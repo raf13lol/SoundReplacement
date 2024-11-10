@@ -30,7 +30,7 @@ public class SoundReplacement : BaseUnityPlugin
         // Plugin startup logic
         Logger = base.Logger;
         soundReplacement = Config.Bind("General", "ReplaceSounds", true, "Whether to replace sounds or not with user-defined sounds.");
-        Logger.LogInfo($"Sound Replacement plugin loaded! Will {(soundReplacement.Value ? "" : "not ")}replace sounds!");
+        Logger.LogMessage($"Sound Replacement plugin loaded! Will {(soundReplacement.Value ? "" : "not ")}replace sounds!");
 
         Harmony instance = new Harmony("patcher");
         instance.PatchAll(typeof(AwakePatch));
@@ -77,7 +77,7 @@ public class SoundReplacement : BaseUnityPlugin
                 int index = UnityEngine.Random.Range(0, songs.Count);
                 string thing = songs[index] + "*external";
 
-                Logger.LogInfo($"Replaced {text} with {thing}!");
+                Logger.LogMessage($"Replaced {text} with {thing}!");
                 __result = __instance.audioLib[thing];
                 return false;
             }
@@ -137,7 +137,7 @@ public class SoundReplacement : BaseUnityPlugin
                 files.Add(text3);
                 num++;
             }
-            Logger.LogInfo($"Added sound replacements for {keyValuePair.Key}: [{log}]!");
+            Logger.LogMessage($"Added sound replacements for {keyValuePair.Key}: [{log}]!");
             replacedSongs.Add(keyValuePair.Key);
             replacedSongsDir.Add(keyValuePair.Key, files);
         }

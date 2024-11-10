@@ -2,7 +2,6 @@ copy:
 UnityEngine.AudioModule.dll
 UnityEngine.CoreModule.dll
 UnityEngine.dll
-UnityEngine.InputLegacyModule.dll
 UnityEngine.UnityWebRequestModule.dll
 UnityEngine.UnityWebRequestAudioModule.dll
 Assembly-CSharp.dll

@@ -38,9 +38,6 @@
     <Reference Include="UnityEngine.UnityWebRequestModule" IncludeAssets="compile" >
       <HintPath>lib\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule" IncludeAssets="compile">
-        <HintPath>lib\UnityEngine.InputModule.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp" IncludeAssets="compile">
         <HintPath>lib\Assembly-CSharp.dll</HintPath>
     </Reference>
