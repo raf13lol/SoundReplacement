@@ -1,5 +1,7 @@
 # SoundReplacement 
 
+## bepinex6 mod mb but i'm sticking with bepinex6 sorry
+
 a mod for rhythm doctor that allows to replace in-game sounds by naming it the internal name
 
 place sounds (.ogg or .wav) to replace in a `replaced/` folder (can have sub folders) that is in the same location as the executable file
