@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine.Networking;
 using UnityEngine;
+using RDLevelEditor;
 
 namespace SoundReplacement;
 
@@ -36,6 +37,7 @@ public class SoundReplacement : BaseUnityPlugin
         instance.PatchAll(typeof(AwakePatch));
         instance.PatchAll(typeof(FlushData));
         instance.PatchAll(typeof(FindOrLoadAudioClip));
+        instance.PatchAll(typeof(RDEUFindClip));
     }
 
     [HarmonyPatch(typeof(AudioManager), nameof(AudioManager.Awake))]
@@ -79,6 +81,27 @@ public class SoundReplacement : BaseUnityPlugin
 
                 Logger.LogMessage($"Replaced {text} with {thing}!");
                 __result = __instance.audioLib[thing];
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(RDEditorUtils), nameof(RDEditorUtils.FindClip))]
+    private static class RDEUFindClip
+    {
+        public static bool Prefix(ref RDAudioLoadType __result, string filename)
+        {
+            string text = Path.GetFileName(filename);
+
+            if (inst.soundReplacement.Value && inst.replacedSongs.IndexOf(text) >= 0)
+            {
+                List<string> songs = inst.replacedSongsDir[text];
+                int index = UnityEngine.Random.Range(0, songs.Count);
+                string thing = songs[index] + "*external";
+
+                Logger.LogMessage($"Replaced {text} with {thing}!");
+                __result = RDAudioLoadType.SuccessInternalClipLoaded;
                 return false;
             }
             return true;
