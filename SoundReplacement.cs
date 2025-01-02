@@ -184,7 +184,8 @@ public class SoundReplacement : BaseUnityPlugin
                 string text = new Uri(path).AbsoluteUri;
                 text = text.Replace("+", "%2B");
                 UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(text, audioType);
-                yield return uwr.SendWebRequest();
+                uwr.SendWebRequest();
+                while (!uwr.isDone) {}
                 DownloadHandlerAudioClip downloadHandlerAudioClip = uwr.downloadHandler as DownloadHandlerAudioClip;
                 clip = downloadHandlerAudioClip.audioClip;
                 if (clip == null)
@@ -211,7 +212,6 @@ public class SoundReplacement : BaseUnityPlugin
             {
                 string conductorName = path + "*external";
                 clip.name = conductorName;
-                yield return new RDAudioLoadResult(RDAudioLoadType.SuccessExternalClipLoaded, clip);
                 if (!am.audioLib.ContainsKey(conductorName))
                 {
                     am.audioLib.Add(conductorName, clip);
